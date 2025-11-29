@@ -3,11 +3,10 @@
   <scroll-view class="detail-scroll" scroll-y>
     <!-- Header -->
     <view class="detail-header">
-      <view class="type-badge" style="background: {{typeColor}}">
-        <text class="type-icon">{{typeIcon}}</text>
+      <view class="type-badge">
         <text>{{approval.typeName}}</text>
       </view>
-      <view class="status-badge {{approval.status}}" style="color: {{statusColor}}">
+      <view class="status-badge {{approval.status}}">
         {{statusText}}
       </view>
     </view>
@@ -85,7 +84,6 @@
                 data-name="{{file.name}}"
                 bindtap="downloadFile"
               >
-                <icon type="download" size="16" color="#667eea"></icon>
                 <text class="file-name">{{file.name}}</text>
                 <view class="file-size">{{file.size}}</view>
               </view>
@@ -99,13 +97,12 @@
               <view class="table-header-row">
                 <text class="table-title">{{item.label}}</text>
                 <text class="table-count">(共{{item.tableData.length}}条)</text>
-                <view 
-                  class="table-toggle" 
+                <view
+                  class="table-toggle"
                   data-key="{{item.key}}"
                   bindtap="toggleTable"
                 >
                   <text>{{tableExpandMap[item.key] ? '收起' : '展开'}}</text>
-                  <icon type="{{tableExpandMap[item.key] ? 'up' : 'down'}}" size="12"></icon>
                 </view>
               </view>
               
@@ -177,7 +174,6 @@
               <text class="status {{item.status}}">{{item.statusText}}</text>
             </view>
             <view wx:if="{{item.time}}" class="timeline-time">
-              <icon type="success" size="12" color="#999"></icon>
               <text>{{item.time}}</text>
             </view>
             <view wx:if="{{item.comment}}" class="timeline-comment">
@@ -217,20 +213,18 @@
 
   <!-- Actions -->
   <view wx:if="{{approval.status === 'pending'}}" class="actions">
-    <button 
-      class="action-btn reject-btn" 
+    <button
+      class="action-btn reject-btn"
       bindtap="handleReject"
       disabled="{{submitting}}"
     >
-      <icon type="cancel" size="18" color="#fff"></icon>
       <text>拒绝</text>
     </button>
-    <button 
-      class="action-btn approve-btn" 
+    <button
+      class="action-btn approve-btn"
       bindtap="handleApprove"
       disabled="{{submitting}}"
     >
-      <icon type="success" size="18" color="#fff"></icon>
       <text>同意</text>
     </button>
   </view>

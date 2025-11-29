@@ -3,19 +3,17 @@
   <!-- Search Bar -->
   <view class="search-bar">
     <view class="search-input-wrapper">
-      <icon class="search-icon" type="search" size="16" color="#999"></icon>
-      <input 
-        class="search-input" 
-        type="text" 
-        placeholder="搜索审批单号、申请人..." 
+      <input
+        class="search-input"
+        type="text"
+        placeholder="搜索审批单号、申请人..."
         value="{{searchKeyword}}"
         bindinput="onSearchInput"
         confirm-type="search"
       />
-      <icon wx:if="{{searchKeyword}}" class="clear-icon" type="clear" size="16" bindtap="clearSearch"></icon>
+      <text wx:if="{{searchKeyword}}" class="clear-icon" bindtap="clearSearch">×</text>
     </view>
     <view class="filter-btn" bindtap="toggleFilter">
-      <icon type="download" size="16" color="#667eea"></icon>
       <text>筛选</text>
     </view>
   </view>
@@ -77,7 +75,6 @@
           bindtap="filterByType"
           data-type="{{item.value}}"
         >
-          <text class="type-icon">{{item.icon}}</text>
           <text>{{item.label}}</text>
         </view>
       </view>
@@ -105,17 +102,16 @@
       <view
         wx:for="{{displayList}}"
         wx:key="id"
-        class="approval-card {{item.isOverdue ? 'overdue' : ''}}"
+        class="approval-card "
         bindtap="goToDetail"
         data-id="{{item.id}}"
       >
         <!-- Header -->
         <view class="card-header">
-          <view class="type-badge" style="background: {{item.typeColor}}">
-            <text class="type-icon">{{item.typeIcon}}</text>
+          <view class="type-badge">
             <text>{{item.typeName}}</text>
           </view>
-          <view class="status-badge {{item.status}}" style="color: {{item.statusColor}}">
+          <view class="status-badge {{item.status}}">
             {{item.statusText}}
           </view>
         </view>
@@ -164,7 +160,6 @@
 
     <!-- Empty State -->
     <view wx:else class="empty-state">
-      <view class="empty-icon">📋</view>
       <view class="empty-text">暂无审批数据</view>
       <view class="empty-tip">下拉刷新试试</view>
     </view>

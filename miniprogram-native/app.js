@@ -1,5 +1,6 @@
 // app.js
 const config = require('./config/index')
+const { eventBus } = require('./utils/event-bus')
 
 App({
   globalData: {
@@ -12,6 +13,9 @@ App({
 
   onLaunch() {
     console.log('小程序启动')
+    
+    // 初始化事件中心
+    this.initEventCenter()
     
     // 检测运行环境
     this.checkEnvironment()
@@ -127,8 +131,30 @@ startSyncTimer() {
   triggerSync() {
     // 通过全局事件通知各页面刷新数据
     if (this.isLoggedIn()) {
-      wx.eventCenter = wx.eventCenter || {}
-      wx.eventCenter.trigger && wx.eventCenter.trigger('syncData')
+      // 确保事件中心已初始化
+      if (!wx.eventCenter) {
+        this.initEventCenter()
+      }
+      
+      wx.eventCenter.trigger('syncData')
+    }
+  },
+
+  /**
+   * 初始化事件中心
+   */
+  initEventCenter() {
+    // 将事件总线挂载到 wx 全局对象上，方便各页面使用
+    wx.eventCenter = {
+      on: eventBus.on.bind(eventBus),
+      trigger: eventBus.trigger.bind(eventBus),
+      off: eventBus.off.bind(eventBus),
+      offAll: eventBus.offAll.bind(eventBus),
+      listenerCount: eventBus.listenerCount.bind(eventBus)
+    }
+    
+    if (config.debug) {
+      console.log('✅ 事件中心初始化成功')
     }
   }
 })

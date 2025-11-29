@@ -1,17 +1,19 @@
-/* pages/index/index.wxss */
+/* pages/index/index.wxss - shadcn 风格 */
+
 .index-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f7f8fa;
+  background: #fafafa;
 }
 
-/* Search Bar */
+/* ========== 搜索栏 ========== */
 .search-bar {
   display: flex;
   align-items: center;
   padding: 20rpx 30rpx;
-  background: #fff;
+  background: #ffffff;
+  border-bottom: 1rpx solid #e4e4e7;
   gap: 20rpx;
 }
 
@@ -19,26 +21,33 @@
   flex: 1;
   display: flex;
   align-items: center;
-  height: 70rpx;
+  height: 72rpx;
   padding: 0 24rpx;
-  background: #f7f8fa;
-  border-radius: 35rpx;
+  background: #fafafa;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 12rpx;
   gap: 16rpx;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.search-icon {
-  flex-shrink: 0;
+.search-input-wrapper:focus-within {
+  border-color: #18181b;
+  background: #ffffff;
 }
 
 .search-input {
   flex: 1;
   font-size: 28rpx;
-  color: #323233;
+  color: #09090b;
 }
 
 .clear-icon {
   flex-shrink: 0;
-  padding: 10rpx;
+  padding: 4rpx 12rpx;
+  font-size: 36rpx;
+  color: #a1a1aa;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .filter-btn {
@@ -47,18 +56,25 @@
   gap: 8rpx;
   padding: 12rpx 20rpx;
   font-size: 26rpx;
-  color: #667eea;
-  border: 1px solid #667eea;
-  border-radius: 8rpx;
+  color: #18181b;
+  background: #f4f4f5;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 10rpx;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Filter Panel */
+.filter-btn:active {
+  background: #e4e4e7;
+  transform: scale(0.95);
+}
+
+/* ========== 筛选面板 ========== */
 .filter-panel {
   max-height: 0;
   overflow: hidden;
-  background: #fff;
-  border-bottom: 1px solid #ebedf0;
-  transition: max-height 0.3s;
+  background: #ffffff;
+  border-bottom: 1rpx solid #e4e4e7;
+  transition: max-height 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-panel.show {
@@ -76,17 +92,20 @@
 .filter-label {
   width: 140rpx;
   font-size: 28rpx;
-  color: #646566;
+  font-weight: 500;
+  color: #09090b;
 }
 
 .filter-input {
   flex: 1;
-  height: 70rpx;
+  height: 72rpx;
   padding: 0 24rpx;
   font-size: 28rpx;
-  background: #f7f8fa;
-  border-radius: 8rpx;
-  line-height: 70rpx;
+  background: #fafafa;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 10rpx;
+  color: #09090b;
+  line-height: 72rpx;
 }
 
 .filter-actions {
@@ -101,24 +120,36 @@
   height: 80rpx;
   line-height: 80rpx;
   font-size: 28rpx;
-  border-radius: 8rpx;
+  font-weight: 500;
+  border-radius: 10rpx;
+  text-align: center;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-btn-reset {
-  background: #f7f8fa;
-  color: #646566;
+  background: #f4f4f5;
+  color: #52525b;
+  border: 1rpx solid #e4e4e7;
+}
+
+.filter-btn-reset:active {
+  background: #e4e4e7;
 }
 
 .filter-btn-apply {
-  background: #667eea;
-  color: #fff;
+  background: #18181b;
+  color: #fafafa;
 }
 
-/* Tabs */
+.filter-btn-apply:active {
+  opacity: 0.9;
+}
+
+/* ========== 标签页 ========== */
 .tabs {
   display: flex;
-  background: #fff;
-  border-bottom: 1px solid #ebedf0;
+  background: #ffffff;
+  border-bottom: 1rpx solid #e4e4e7;
 }
 
 .tab-item {
@@ -127,26 +158,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90rpx;
+  height: 96rpx;
   font-size: 28rpx;
-  color: #646566;
-  transition: all 0.3s;
+  color: #71717a;
+  font-weight: 400;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-item.active {
-  color: #667eea;
+  color: #09090b;
   font-weight: 600;
 }
 
-.tab-item.active::after {
-  content: '';
+/* 微信小程序不支持::after伪元素，需要使用额外的view元素来实现下划线效果 */
+.tab-indicator {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 60rpx;
   height: 4rpx;
-  background: #667eea;
+  background: #18181b;
   border-radius: 2rpx;
 }
 
@@ -160,23 +192,24 @@
   height: 32rpx;
   line-height: 32rpx;
   font-size: 20rpx;
-  color: #fff;
-  background: #ff9500;
+  color: #fafafa;
+  background: #f97316;
   border-radius: 16rpx;
 }
 
-/* Filter Bar */
+/* ========== 筛选条 ========== */
 .filter-bar {
   display: flex;
   align-items: center;
   padding: 20rpx 30rpx;
-  background: #fff;
-  border-bottom: 1px solid #ebedf0;
+  background: #ffffff;
+  border-bottom: 1rpx solid #e4e4e7;
 }
 
 .filter-label {
   font-size: 28rpx;
-  color: #323233;
+  font-weight: 500;
+  color: #09090b;
   margin-right: 20rpx;
 }
 
@@ -187,7 +220,7 @@
 
 .filter-options {
   display: inline-flex;
-  gap: 20rpx;
+  gap: 12rpx;
 }
 
 .filter-item {
@@ -196,22 +229,20 @@
   gap: 8rpx;
   padding: 12rpx 24rpx;
   font-size: 26rpx;
-  color: #646566;
-  background: #f7f8fa;
-  border-radius: 8rpx;
-  transition: all 0.3s;
+  color: #52525b;
+  background: #f4f4f5;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 24rpx;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-item.active {
-  color: #fff;
-  background: #667eea;
+  color: #fafafa;
+  background: #18181b;
+  border-color: #18181b;
 }
 
-.type-icon {
-  font-size: 32rpx;
-}
-
-/* Loading State */
+/* ========== 加载状态 ========== */
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -221,10 +252,10 @@
 }
 
 .loading-spinner {
-  width: 80rpx;
-  height: 80rpx;
-  border: 4rpx solid #ebedf0;
-  border-top-color: #667eea;
+  width: 64rpx;
+  height: 64rpx;
+  border: 4rpx solid #e4e4e7;
+  border-top-color: #18181b;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -242,36 +273,36 @@
 .loading-text {
   margin-top: 20rpx;
   font-size: 26rpx;
-  color: #969799;
+  color: #71717a;
 }
 
-/* List */
+/* ========== 列表区域 ========== */
 .list-scroll {
   flex: 1;
   overflow-y: auto;
 }
 
 .list-content {
-  padding: 20rpx 30rpx;
+  padding: 20rpx 30rpx 100rpx;
 }
 
-/* Approval Card */
+/* ========== 审批卡片 ========== */
 .approval-card {
   margin-bottom: 20rpx;
   padding: 30rpx;
-  background: #fff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05);
-  transition: all 0.3s;
+  background: #ffffff;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 12rpx;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .approval-card:active {
   transform: scale(0.98);
-  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.08);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
 }
 
 .approval-card.overdue {
-  border-left: 6rpx solid #ee0a24;
+  border-left: 4rpx solid #ef4444;
 }
 
 .card-header {
@@ -287,19 +318,43 @@
   gap: 8rpx;
   padding: 8rpx 20rpx;
   font-size: 24rpx;
-  color: #fff;
-  border-radius: 8rpx;
+  color: #18181b;
+  background: #f4f4f5;
+  border: 1rpx solid #e4e4e7;
+  border-radius: 24rpx;
+  font-weight: 500;
 }
 
+/* 状态徽章 */
 .status-badge {
   font-size: 24rpx;
   font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 24rpx;
+}
+
+.status-badge.pending {
+  color: #c2410c;
+  background: #fff7ed;
+  border: 1rpx solid #fed7aa;
+}
+
+.status-badge.approved {
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1rpx solid #bbf7d0;
+}
+
+.status-badge.rejected {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1rpx solid #fecaca;
 }
 
 .card-id {
   margin-bottom: 16rpx;
   font-size: 24rpx;
-  color: #969799;
+  color: #a1a1aa;
 }
 
 .id-label {
@@ -307,14 +362,15 @@
 }
 
 .id-value {
-  color: #323233;
+  color: #71717a;
+  font-weight: 500;
 }
 
 .card-summary {
   margin-bottom: 20rpx;
   font-size: 30rpx;
   font-weight: 600;
-  color: #323233;
+  color: #09090b;
   line-height: 1.5;
 }
 
@@ -331,13 +387,14 @@
 
 .field-label {
   flex-shrink: 0;
-  color: #969799;
+  color: #71717a;
 }
 
 .field-value {
   flex: 1;
-  color: #323233;
+  color: #09090b;
   word-break: break-all;
+  font-weight: 500;
 }
 
 .card-footer {
@@ -345,7 +402,7 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 20rpx;
-  border-top: 1px solid #ebedf0;
+  border-top: 1rpx solid #e4e4e7;
   font-size: 24rpx;
 }
 
@@ -361,27 +418,28 @@
 }
 
 .applicant {
-  color: #646566;
+  color: #52525b;
+  font-weight: 500;
 }
 
 .time {
-  color: #969799;
+  color: #a1a1aa;
 }
 
 .overdue-tag {
   padding: 4rpx 12rpx;
   font-size: 20rpx;
-  color: #fff;
-  background: #ee0a24;
-  border-radius: 4rpx;
+  color: #fafafa;
+  background: #ef4444;
+  border-radius: 12rpx;
 }
 
-/* Load More */
+/* ========== 加载更多 ========== */
 .load-more {
   padding: 30rpx;
   text-align: center;
   font-size: 26rpx;
-  color: #667eea;
+  color: #18181b;
 }
 
 .load-more.loading {
@@ -389,17 +447,17 @@
   align-items: center;
   justify-content: center;
   gap: 16rpx;
-  color: #969799;
+  color: #71717a;
 }
 
 .no-more {
   padding: 30rpx;
   text-align: center;
   font-size: 24rpx;
-  color: #c8c9cc;
+  color: #a1a1aa;
 }
 
-/* Empty State */
+/* ========== 空状态 ========== */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -408,19 +466,14 @@
   padding: 200rpx 0;
 }
 
-.empty-icon {
-  font-size: 120rpx;
-  margin-bottom: 30rpx;
-  opacity: 0.5;
-}
-
 .empty-text {
-  font-size: 28rpx;
-  color: #969799;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #09090b;
   margin-bottom: 12rpx;
 }
 
 .empty-tip {
-  font-size: 24rpx;
-  color: #c8c9cc;
+  font-size: 26rpx;
+  color: #71717a;
 }

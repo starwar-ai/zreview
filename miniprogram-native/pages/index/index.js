@@ -64,8 +64,8 @@ Page({
 
   onUnload() {
     // 取消监听
-    if (this.syncListener) {
-      wx.eventCenter && wx.eventCenter.off && wx.eventCenter.off('syncData', this.syncListener)
+    if (this.syncListener && wx.eventCenter && wx.eventCenter.off) {
+      wx.eventCenter.off('syncData', this.syncListener)
     }
   },
 
@@ -78,22 +78,10 @@ Page({
       this.loadApprovals(true)
     }
     
-    // 注册监听（简单实现，实际可用 EventBus）
-    wx.eventCenter = wx.eventCenter || { listeners: {} }
-    wx.eventCenter.on = function(event, callback) {
-      this.listeners[event] = this.listeners[event] || []
-      this.listeners[event].push(callback)
+    // 注册监听
+    if (wx.eventCenter && wx.eventCenter.on) {
+      wx.eventCenter.on('syncData', this.syncListener)
     }
-    wx.eventCenter.trigger = function(event, data) {
-      const callbacks = this.listeners[event] || []
-      callbacks.forEach(cb => cb(data))
-    }
-    wx.eventCenter.off = function(event, callback) {
-      if (!this.listeners[event]) return
-      this.listeners[event] = this.listeners[event].filter(cb => cb !== callback)
-    }
-    
-    wx.eventCenter.on('syncData', this.syncListener)
   },
 
   /**
