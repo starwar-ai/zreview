@@ -1,0 +1,172 @@
+<!--pages/index/index.wxml-->
+<view class="index-container">
+  <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <icon class="search-icon" type="search" size="16" color="#999"></icon>
+      <input 
+        class="search-input" 
+        type="text" 
+        placeholder="搜索审批单号、申请人..." 
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+      />
+      <icon wx:if="{{searchKeyword}}" class="clear-icon" type="clear" size="16" bindtap="clearSearch"></icon>
+    </view>
+    <view class="filter-btn" bindtap="toggleFilter">
+      <icon type="download" size="16" color="#667eea"></icon>
+      <text>筛选</text>
+    </view>
+  </view>
+
+  <!-- Filter Panel -->
+  <view class="filter-panel {{showFilter ? 'show' : ''}}">
+    <view class="filter-row">
+      <text class="filter-label">申请人:</text>
+      <input class="filter-input" placeholder="请输入申请人" value="{{filterOptions.applicant}}" data-field="applicant" bindinput="onFilterChange" />
+    </view>
+    <view class="filter-row">
+      <text class="filter-label">开始日期:</text>
+      <picker mode="date" value="{{filterOptions.startDate}}" data-field="startDate" bindchange="onFilterChange">
+        <view class="filter-input">{{filterOptions.startDate || '请选择'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text class="filter-label">结束日期:</text>
+      <picker mode="date" value="{{filterOptions.endDate}}" data-field="endDate" bindchange="onFilterChange">
+        <view class="filter-input">{{filterOptions.endDate || '请选择'}}</view>
+      </picker>
+    </view>
+    <view class="filter-actions">
+      <button class="filter-btn-reset" bindtap="resetFilter">重置</button>
+      <button class="filter-btn-apply" bindtap="applyFilter">应用</button>
+    </view>
+  </view>
+
+  <!-- Tabs -->
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="value"
+      class="tab-item {{activeTab === item.value ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="{{item.value}}"
+    >
+      <text class="tab-label">{{item.label}}</text>
+      <view wx:if="{{item.count > 0}}" class="tab-badge">{{item.count}}</view>
+    </view>
+  </view>
+
+  <!-- Type Filter -->
+  <view class="filter-bar">
+    <view class="filter-label">类型:</view>
+    <scroll-view class="filter-scroll" scroll-x>
+      <view class="filter-options">
+        <view
+          class="filter-item {{currentType === '' ? 'active' : ''}}"
+          bindtap="filterByType"
+          data-type=""
+        >
+          全部
+        </view>
+        <view
+          wx:for="{{typeOptions}}"
+          wx:key="value"
+          class="filter-item {{currentType === item.value ? 'active' : ''}}"
+          bindtap="filterByType"
+          data-type="{{item.value}}"
+        >
+          <text class="type-icon">{{item.icon}}</text>
+          <text>{{item.label}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- Loading State -->
+  <view wx:if="{{loading && !displayList.length}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- List -->
+  <scroll-view
+    wx:else
+    class="list-scroll"
+    scroll-y
+    refresher-enabled
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    bindscrolltolower="onLoadMore"
+    lower-threshold="100"
+  >
+    <view wx:if="{{displayList.length > 0}}" class="list-content">
+      <view
+        wx:for="{{displayList}}"
+        wx:key="id"
+        class="approval-card {{item.isOverdue ? 'overdue' : ''}}"
+        bindtap="goToDetail"
+        data-id="{{item.id}}"
+      >
+        <!-- Header -->
+        <view class="card-header">
+          <view class="type-badge" style="background: {{item.typeColor}}">
+            <text class="type-icon">{{item.typeIcon}}</text>
+            <text>{{item.typeName}}</text>
+          </view>
+          <view class="status-badge {{item.status}}" style="color: {{item.statusColor}}">
+            {{item.statusText}}
+          </view>
+        </view>
+
+        <!-- ID -->
+        <view class="card-id">
+          <text class="id-label">单号:</text>
+          <text class="id-value">{{item.id}}</text>
+        </view>
+
+        <!-- Summary -->
+        <view class="card-summary">{{item.summary}}</view>
+
+        <!-- Fields -->
+        <view class="card-fields">
+          <view wx:for="{{item.displayFields}}" wx:key="key" wx:for-item="field" class="field-row">
+            <text class="field-label">{{field.label}}:</text>
+            <text class="field-value">{{field.value}}</text>
+          </view>
+        </view>
+
+        <!-- Footer -->
+        <view class="card-footer">
+          <view class="footer-left">
+            <text class="applicant">{{item.applicant}}</text>
+          </view>
+          <view class="footer-right">
+            <text class="time">{{item.submitTime}}</text>
+            <view wx:if="{{item.isOverdue}}" class="overdue-tag">超时</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Load More -->
+      <view wx:if="{{hasMore && !loading}}" class="load-more" bindtap="onLoadMore">
+        <text>点击加载更多</text>
+      </view>
+      <view wx:if="{{loading}}" class="load-more loading">
+        <view class="loading-spinner small"></view>
+        <text>加载中...</text>
+      </view>
+      <view wx:if="{{!hasMore && displayList.length > 0}}" class="no-more">
+        <text>没有更多数据了</text>
+      </view>
+    </view>
+
+    <!-- Empty State -->
+    <view wx:else class="empty-state">
+      <view class="empty-icon">📋</view>
+      <view class="empty-text">暂无审批数据</view>
+      <view class="empty-tip">下拉刷新试试</view>
+    </view>
+  </scroll-view>
+</view>

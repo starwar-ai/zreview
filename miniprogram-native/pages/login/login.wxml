@@ -1,0 +1,52 @@
+<!--pages/login/login.wxml-->
+<view class="login-container">
+  <view class="login-header">
+    <view class="logo">Z</view>
+    <view class="title">Zreview 审批系统</view>
+    <view class="subtitle">企业审批，高效便捷</view>
+  </view>
+
+  <view class="login-form">
+    <view class="form-item">
+      <input
+        class="input"
+        type="text"
+        placeholder="请输入用户名"
+        value="{{username}}"
+        bindinput="onUsernameInput"
+      />
+    </view>
+
+    <view class="test-accounts">
+      <view class="test-title">测试账号:</view>
+      <view class="account-list">
+        <view class="account-item" bindtap="selectAccount" data-username="zhangsan">
+          <view class="account-name">zhangsan</view>
+          <view class="account-desc">张三 - 部门经理 (5条待审批)</view>
+        </view>
+        <view class="account-item" bindtap="selectAccount" data-username="lisi">
+          <view class="account-name">lisi</view>
+          <view class="account-desc">李四 - 财务主管 (1条待审批)</view>
+        </view>
+        <view class="account-item" bindtap="selectAccount" data-username="wangwu">
+          <view class="account-name">wangwu</view>
+          <view class="account-desc">王五 - 采购专员</view>
+        </view>
+      </view>
+    </view>
+
+    <button
+      class="login-btn"
+      type="primary"
+      bindtap="handleLogin"
+      disabled="{{loading || !username}}"
+      loading="{{loading}}"
+    >
+      {{loading ? '登录中...' : '登录'}}
+    </button>
+  </view>
+
+  <view class="login-footer">
+    <view class="footer-text">仅供演示使用</view>
+  </view>
+</view>

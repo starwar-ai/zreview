@@ -1,0 +1,237 @@
+<!--pages/detail/detail.wxml-->
+<view class="detail-container">
+  <scroll-view class="detail-scroll" scroll-y>
+    <!-- Header -->
+    <view class="detail-header">
+      <view class="type-badge" style="background: {{typeColor}}">
+        <text class="type-icon">{{typeIcon}}</text>
+        <text>{{approval.typeName}}</text>
+      </view>
+      <view class="status-badge {{approval.status}}" style="color: {{statusColor}}">
+        {{statusText}}
+      </view>
+    </view>
+
+    <!-- ID -->
+    <view class="detail-id">
+      <text class="id-label">审批单号:</text>
+      <text class="id-value">{{approval.id}}</text>
+    </view>
+
+    <!-- Summary -->
+    <view class="detail-summary">{{approval.summary}}</view>
+
+    <!-- Form Fields -->
+    <view class="section">
+      <view class="section-title">
+        <view class="title-bar"></view>
+        <text>申请详情</text>
+      </view>
+      <view class="form-fields">
+        <view wx:for="{{formFields}}" wx:key="key" class="form-field">
+          <view class="field-label">{{item.label}}</view>
+
+          <!-- Text/Textarea -->
+          <view wx:if="{{item.type === 'text' || item.type === 'textarea'}}" class="field-value">
+            {{item.value || '-'}}
+          </view>
+
+          <!-- Number -->
+          <view wx:elif="{{item.type === 'number'}}" class="field-value">
+            {{item.value}}{{item.unit}}
+          </view>
+
+          <!-- Amount -->
+          <view wx:elif="{{item.type === 'amount'}}" class="field-value amount">
+            {{item.formattedValue}}
+          </view>
+
+          <!-- Date -->
+          <view wx:elif="{{item.type === 'date'}}" class="field-value">
+            {{item.formattedValue}}
+          </view>
+
+          <!-- Date Range -->
+          <view wx:elif="{{item.type === 'daterange'}}" class="field-value">
+            {{item.formattedValue}}
+          </view>
+
+          <!-- Image -->
+          <view wx:elif="{{item.type === 'image'}}" class="field-value">
+            <view wx:if="{{item.value && item.value.length > 0}}" class="image-list">
+              <image 
+                wx:for="{{item.value}}" 
+                wx:key="index" 
+                wx:for-item="img"
+                class="image-item" 
+                src="{{img}}" 
+                mode="aspectFill"
+                data-url="{{img}}"
+                bindtap="previewImage"
+              ></image>
+            </view>
+            <view wx:else class="empty-tip">暂无图片</view>
+          </view>
+
+          <!-- File/Attachment -->
+          <view wx:elif="{{item.type === 'file'}}" class="field-value">
+            <view wx:if="{{item.value && item.value.length > 0}}" class="file-list">
+              <view 
+                wx:for="{{item.value}}" 
+                wx:key="index" 
+                wx:for-item="file"
+                class="file-item"
+                data-url="{{file.url}}"
+                data-name="{{file.name}}"
+                bindtap="downloadFile"
+              >
+                <icon type="download" size="16" color="#667eea"></icon>
+                <text class="file-name">{{file.name}}</text>
+                <view class="file-size">{{file.size}}</view>
+              </view>
+            </view>
+            <view wx:else class="empty-tip">暂无附件</view>
+          </view>
+
+          <!-- Table -->
+          <view wx:elif="{{item.type === 'table'}}" class="field-value">
+            <view wx:if="{{item.tableData && item.tableData.length > 0}}" class="table-wrapper">
+              <view class="table-header-row">
+                <text class="table-title">{{item.label}}</text>
+                <text class="table-count">(共{{item.tableData.length}}条)</text>
+                <view 
+                  class="table-toggle" 
+                  data-key="{{item.key}}"
+                  bindtap="toggleTable"
+                >
+                  <text>{{tableExpandMap[item.key] ? '收起' : '展开'}}</text>
+                  <icon type="{{tableExpandMap[item.key] ? 'up' : 'down'}}" size="12"></icon>
+                </view>
+              </view>
+              
+              <scroll-view 
+                wx:if="{{tableExpandMap[item.key] || item.tableData.length <= 5}}"
+                class="table-scroll" 
+                scroll-x
+              >
+                <view class="table">
+                  <view class="table-header">
+                    <view 
+                      wx:for="{{item.columns}}" 
+                      wx:key="key" 
+                      wx:for-item="col" 
+                      class="table-cell header"
+                      style="width: {{col.width || 'auto'}}"
+                    >
+                      {{col.label}}
+                    </view>
+                  </view>
+                  <view 
+                    wx:for="{{item.tableData}}" 
+                    wx:key="index" 
+                    wx:for-item="row" 
+                    class="table-row"
+                  >
+                    <view 
+                      wx:for="{{item.columns}}" 
+                      wx:key="key" 
+                      wx:for-item="col" 
+                      class="table-cell"
+                      style="width: {{col.width || 'auto'}}"
+                    >
+                      {{row[col.key] || '-'}}
+                    </view>
+                  </view>
+                </view>
+              </scroll-view>
+              
+              <view wx:else class="table-collapsed">
+                <text>点击展开查看完整明细</text>
+              </view>
+            </view>
+            <view wx:else class="empty-tip">暂无数据</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Approval Timeline -->
+    <view class="section">
+      <view class="section-title">
+        <view class="title-bar"></view>
+        <text>审批流程</text>
+      </view>
+      <view class="timeline">
+        <view 
+          wx:for="{{approval.approvalFlow}}" 
+          wx:key="index" 
+          class="timeline-item {{item.status}}"
+        >
+          <view class="timeline-dot-wrapper">
+            <view class="timeline-dot {{item.status}}"></view>
+            <view wx:if="{{index < approval.approvalFlow.length - 1}}" class="timeline-line"></view>
+          </view>
+          <view class="timeline-content">
+            <view class="timeline-header">
+              <text class="approver">{{item.approver}}</text>
+              <text class="status {{item.status}}">{{item.statusText}}</text>
+            </view>
+            <view wx:if="{{item.time}}" class="timeline-time">
+              <icon type="success" size="12" color="#999"></icon>
+              <text>{{item.time}}</text>
+            </view>
+            <view wx:if="{{item.comment}}" class="timeline-comment">
+              <view class="comment-label">审批意见:</view>
+              <view class="comment-text">{{item.comment}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Base Info -->
+    <view class="section">
+      <view class="section-title">
+        <view class="title-bar"></view>
+        <text>基本信息</text>
+      </view>
+      <view class="info-list">
+        <view class="info-item">
+          <text class="info-label">申请人</text>
+          <text class="info-value">{{approval.applicant}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">提交时间</text>
+          <text class="info-value">{{submitTime}}</text>
+        </view>
+        <view wx:if="{{approval.department}}" class="info-item">
+          <text class="info-label">所属部门</text>
+          <text class="info-value">{{approval.department}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Bottom Spacing for Actions -->
+    <view class="bottom-spacing"></view>
+  </scroll-view>
+
+  <!-- Actions -->
+  <view wx:if="{{approval.status === 'pending'}}" class="actions">
+    <button 
+      class="action-btn reject-btn" 
+      bindtap="handleReject"
+      disabled="{{submitting}}"
+    >
+      <icon type="cancel" size="18" color="#fff"></icon>
+      <text>拒绝</text>
+    </button>
+    <button 
+      class="action-btn approve-btn" 
+      bindtap="handleApprove"
+      disabled="{{submitting}}"
+    >
+      <icon type="success" size="18" color="#fff"></icon>
+      <text>同意</text>
+    </button>
+  </view>
+</view>
