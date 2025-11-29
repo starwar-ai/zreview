@@ -21,14 +21,14 @@
       {
         "pagePath": "pages/index/index",
         "text": "审批",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "images/approval.png",
+        "selectedIconPath": "images/approval-active.png"
       },
       {
         "pagePath": "pages/profile/profile",
         "text": "我的",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
       }
     ]
   },
