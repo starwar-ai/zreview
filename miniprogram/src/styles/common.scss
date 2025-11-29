@@ -1,0 +1,110 @@
+// 全局样式
+
+// 颜色变量
+$primary-color: #1989fa;
+$success-color: #07c160;
+$warning-color: #ff976a;
+$danger-color: #ee0a24;
+$text-color: #323233;
+$text-color-secondary: #969799;
+$border-color: #ebedf0;
+$background-color: #f7f8fa;
+
+// 间距
+$padding-xs: 8rpx;
+$padding-sm: 12rpx;
+$padding-md: 16rpx;
+$padding-lg: 24rpx;
+$padding-xl: 32rpx;
+
+// 字体大小
+$font-size-xs: 20rpx;
+$font-size-sm: 24rpx;
+$font-size-md: 28rpx;
+$font-size-lg: 32rpx;
+$font-size-xl: 36rpx;
+
+// 圆角
+$border-radius-sm: 4rpx;
+$border-radius-md: 8rpx;
+$border-radius-lg: 16rpx;
+
+// 全局重置
+page {
+  background-color: $background-color;
+  font-size: $font-size-md;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+// 通用类
+.container {
+  padding: $padding-md;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+.text-success {
+  color: $success-color;
+}
+
+.text-warning {
+  color: $warning-color;
+}
+
+.text-danger {
+  color: $danger-color;
+}
+
+.text-secondary {
+  color: $text-color-secondary;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mt-sm { margin-top: $padding-sm; }
+.mt-md { margin-top: $padding-md; }
+.mt-lg { margin-top: $padding-lg; }
+
+.mb-sm { margin-bottom: $padding-sm; }
+.mb-md { margin-bottom: $padding-md; }
+.mb-lg { margin-bottom: $padding-lg; }
+
+.p-sm { padding: $padding-sm; }
+.p-md { padding: $padding-md; }
+.p-lg { padding: $padding-lg; }
