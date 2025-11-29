@@ -8,31 +8,42 @@ const { request } = require('./request')
  */
 function workWeChatLogin() {
   return new Promise((resolve, reject) => {
-    // 检查是否支持企业微信接口
-    if (typeof wx.qy === 'undefined') {
-      reject(new Error('不支持企业微信登录'))
+  // 检查是否在企业微信环境
+  const config = require('../config/index')
+  if (!config.wechat.isWorkWeChat()) {
+      reject(new Error('当前不在企业微信环境，无法使用企业微信登录'))
       return
     }
 
-    wx.qy.login({
-      success: async (res) => {
-        try {
-          // 将 code 发送到后端换取 token
-          const result = await request({
-            url: '/auth/work-wechat/login',
-            method: 'POST',
-            data: { code: res.code },
-            showError: true
-          })
-          resolve(result.data)
-        } catch (error) {
-          reject(error)
+    // 企业微信登录接口可能不存在，需要处理兼容性
+    if (typeof wx.qy !== 'undefined' && wx.qy.login) {
+      wx.qy.login({
+        success: async (res) => {
+          try {
+            // 将 code 发送到后端换取 token
+            const result = await request({
+              url: '/auth/work-wechat/login',
+              method: 'POST',
+              data: { code: res.code },
+              showError: true
+            })
+            resolve(result.data)
+          } catch (error) {
+            reject(error)
+          }
+        },
+        fail: (err) => {
+          console.error('企业微信登录失败:', err)
+          reject(new Error('企业微信登录失败，请重试'))
         }
-      },
-      fail: (err) => {
-        reject(err)
-      }
-    })
+      })
+    } else {
+      // 如果不支持企业微信接口，降级到普通微信登录
+      console.log('企业微信接口不可用，降级到微信登录')
+      weChatLogin()
+        .then(resolve)
+        .catch(reject)
+    }
   })
 }
 

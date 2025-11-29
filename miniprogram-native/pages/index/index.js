@@ -2,7 +2,7 @@
 const { getApprovalList, getApprovalTypes } = require('../../api/approval')
 const { formatDate, formatDateTime, formatAmount, formatDateRange, getStatusText, getStatusColor, getTypeColor } = require('../../utils/format')
 const { cacheApprovalList, getCachedApprovalList } = require('../../utils/storage')
-const approvalTypesConfig = require('../../config/approval-types')
+const config = require('../../config/index')
 const app = getApp()
 
 Page({
@@ -103,21 +103,21 @@ Page({
     try {
       // 优先使用本地配置
       this.setData({
-        typeConfigs: approvalTypesConfig
+        typeConfigs: config.approvalTypes
       })
       
       // 尝试从服务器加载最新配置
       const res = await getApprovalTypes()
       if (res.data) {
         this.setData({
-          typeConfigs: { ...approvalTypesConfig, ...res.data }
+          typeConfigs: { ...config.approvalTypes, ...res.data }
         })
       }
     } catch (error) {
       console.error('加载审批类型配置失败:', error)
       // 使用本地配置作为降级方案
       this.setData({
-        typeConfigs: approvalTypesConfig
+        typeConfigs: config.approvalTypes
       })
     }
   },

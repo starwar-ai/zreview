@@ -2,7 +2,7 @@
 const { getApprovalDetail, submitApproval, getApprovalTypes } = require('../../api/approval')
 const { formatDate, formatDateTime, formatAmount, formatDateRange, getStatusText, getStatusColor, getTypeColor } = require('../../utils/format')
 const { cacheApprovalDetail, getCachedApprovalDetail } = require('../../utils/storage')
-const approvalTypesConfig = require('../../config/approval-types')
+const config = require('../../config/index')
 const app = getApp()
 
 Page({
@@ -56,11 +56,11 @@ Page({
       }
 
       // 加载类型配置
-      let typeConfigs = approvalTypesConfig
+      let typeConfigs = config.approvalTypes
       try {
         const typesRes = await getApprovalTypes()
         if (typesRes.data) {
-          typeConfigs = { ...approvalTypesConfig, ...typesRes.data }
+          typeConfigs = { ...config.approvalTypes, ...typesRes.data }
         }
       } catch (error) {
         console.log('使用本地类型配置')
@@ -89,7 +89,7 @@ Page({
   /**
    * 处理详情数据
    */
-  processDetailData(approval, typeConfigs = approvalTypesConfig) {
+  processDetailData(approval, typeConfigs = config.approvalTypes) {
     // 获取类型配置
     const typeConfig = typeConfigs[approval.type]
 

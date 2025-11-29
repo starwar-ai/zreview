@@ -1,5 +1,5 @@
 // utils/request.js
-const apiConfig = require('../config/api')
+const config = require('../config/index')
 
 let app = null
 
@@ -52,7 +52,7 @@ function request(options) {
       method,
       data,
       header,
-      timeout: apiConfig.timeout,
+      timeout: config.api.timeout,
       success(res) {
         if (res.statusCode === 200) {
           if (res.data.code === 0) {
